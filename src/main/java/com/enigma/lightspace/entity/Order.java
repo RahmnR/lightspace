@@ -25,7 +25,7 @@ public class Order {
 
     @CreatedDate
     @Column(name = "order_date", nullable = false, updatable = false)
-    private LocalDateTime order_date;
+    private LocalDateTime orderDate;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
     private List<OrderDetail> orderDetails;

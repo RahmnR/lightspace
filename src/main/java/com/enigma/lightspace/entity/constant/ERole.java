@@ -5,7 +5,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 public enum ERole {
     ROLE_ADMIN,
-    ROLE_CUSTOMER;
+    ROLE_VENDOR;
 
     public static ERole get(String value) {
         for (ERole eRole : ERole.values()) {
