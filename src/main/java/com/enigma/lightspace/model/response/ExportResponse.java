@@ -1,6 +1,5 @@
 package com.enigma.lightspace.model.response;
 
-import com.enigma.lightspace.entity.ProductPrice;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class OrderDetailResponse {
-    private String product;
+public class ExportResponse {
+    private String code;
+    private String date;
+    private String vendorName;
+    private String productName;
+    private String category;
+    private Long price;
     private Integer quantity;
-    private Long subTotal;
+    private Long subPrice;
 }

@@ -69,6 +69,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponse> getAll() {
+
         List<Product> collect = productRepository.findAll().stream()
                 .filter(product -> product.getStatus().equals(true))
                 .collect(Collectors.toList());

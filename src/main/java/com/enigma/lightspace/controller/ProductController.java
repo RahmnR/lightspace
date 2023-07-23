@@ -7,6 +7,7 @@ import com.enigma.lightspace.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,17 +19,19 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-    @PostMapping
-    public ResponseEntity<?> createNewProduct(@RequestBody ProductRequest request,Authentication authentication) {
-        ProductResponse productResponse = productService.create(request, authentication);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(CommonResponse.<ProductResponse>builder()
-                        .statusCode(HttpStatus.CREATED.value())
-                        .message("Successfully create new product")
-                        .data(productResponse)
-                        .build());
-    }
+        @PostMapping
+        @PreAuthorize("hasRole('VENDOR')")
+        public ResponseEntity<?> createNewProduct(@RequestBody ProductRequest request,Authentication authentication) {
+            ProductResponse productResponse = productService.create(request, authentication);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(CommonResponse.<ProductResponse>builder()
+                            .statusCode(HttpStatus.CREATED.value())
+                            .message("Successfully create new product")
+                            .data(productResponse)
+                            .build());
+        }
 
+    @PreAuthorize("hasRole('VENDOR')")
     @PostMapping(path = "/bulk")
     public ResponseEntity<?> createBulkProduct(@RequestBody List<ProductRequest> products,Authentication authentication) {
         List<ProductResponse> productResponses = productService.createBulk(products,authentication);
@@ -51,30 +54,19 @@ public class ProductController {
                         .build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<?> getAllProduct(
-            @RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "maxPrice", required = false) Long maxPrice,
-            @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
-            @RequestParam(name = "size", required = false, defaultValue = "10") Integer size
-    ) {
-//        Page<ProductResponse> productResponses = productService.getAllByNameOrPrice(name, maxPrice, page - 1, size);
-//        PagingResponse pagingResponse = PagingResponse.builder()
-//                .currentPage(page)
-//                .totalPage(productResponses.getTotalPages())
-//                .size(size)
-//                .build();
-        List<ProductResponse> all = productService.getAll();
+    public ResponseEntity<?> getAllProduct() {
+        List<ProductResponse> productResponses = productService.getAll();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CommonResponse.builder()
                         .statusCode(HttpStatus.OK.value())
                         .message("Successfully get all customer")
-                        .data(all)
-//                        .data(productResponses.getContent())
-//                        .paging(pagingResponse)
+                        .data(productResponses)
                         .build());
     }
 
+    @PreAuthorize("hasRole('VENDOR') and @userSecurity.checkVendor(authentication,#vendor.getById())")
     @PutMapping
     public ResponseEntity<?> updateProduct(@RequestBody ProductRequest request) {
         ProductResponse productResponse = productService.update(request);
@@ -86,6 +78,7 @@ public class ProductController {
                         .build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "/{code}")
     public ResponseEntity<?> deleteById(@PathVariable(name = "code") String code) {
         productService.deleteByCode(code);

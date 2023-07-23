@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -29,8 +30,8 @@ public class Order {
     private String id;
 
     @CreatedDate
-    @Column(name = "order_date", nullable = false, updatable = false)
-    private LocalDateTime orderDate;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createAt;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
     private List<OrderDetail> orderDetails;

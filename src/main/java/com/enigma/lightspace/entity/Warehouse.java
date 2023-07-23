@@ -31,9 +31,8 @@ public class Warehouse {
     @Column(name = "code", unique = true)
     private String code;
 
-    @OneToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @Column(name = "product")
+    private String product;
 
     private Integer stock;
 

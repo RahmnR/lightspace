@@ -1,6 +1,8 @@
 package com.enigma.lightspace.service.impl;
 
 import com.enigma.lightspace.entity.Vendor;
+import com.enigma.lightspace.model.request.VendorRequest;
+import com.enigma.lightspace.model.response.VendorResponse;
 import com.enigma.lightspace.repository.VendorRepository;
 import com.enigma.lightspace.service.VendorService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,24 +33,33 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Vendor getById(String id) {
         return vendorRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Id notfound"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Id notfound"));
     }
 
     @Override
-    public List<Vendor> getAll() {
-        return vendorRepository.findAll();
+    public List<VendorResponse> getAll() {
+        return vendorRepository.findAll().stream()
+                .map(vendor -> toResponse(vendor)).collect(Collectors.toList());
     }
 
     @Override
-    public Vendor update(Vendor vendor) {
-        Vendor data = getById(vendor.getId());
-        if (data!=null)return vendorRepository.save(vendor);
-        return null;
+    public VendorResponse update(VendorRequest request, Authentication authentication) {
+        Vendor vendor = getByAuth(authentication);
+        vendor.setName(request.getName());
+        vendor.setPhone(request.getPhone());
+        return toResponse(vendor);
     }
 
     @Override
     public void deleteByid(String id) {
         Vendor data = getById(id);
         vendorRepository.delete(data);
+    }
+
+    private VendorResponse toResponse(Vendor vendor){
+        return VendorResponse.builder()
+                .name(vendor.getName())
+                .phone(vendor.getPhone())
+                .build();
     }
 }
