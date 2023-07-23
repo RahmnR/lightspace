@@ -5,8 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,6 +21,7 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 @Entity
 @Table(name = "m_admin")
+@EntityListeners(AuditingEntityListener.class)
 public class Admin {
     @Id
     @GenericGenerator(strategy = "uuid2", name = "system-uuid")
@@ -35,10 +40,14 @@ public class Admin {
     private UserCredential userCredential;
 
     @CreatedDate
-    @Column(name = "create_at", nullable = false, updatable = false)
+    @Column(name = "create_at",  updatable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    @Column(name = "update_at", nullable = false)
-    private LocalDateTime updatedAt;
+//    @CreatedBy
+//    @Column(name = "created_by", updatable = false)
+//    private String createdBy;
+//
+//    @LastModifiedBy
+//    @Column(name = "updated_by")
+//    private String updatedBy;
 }

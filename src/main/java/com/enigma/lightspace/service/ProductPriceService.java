@@ -9,5 +9,7 @@ import java.util.List;
 
 public interface ProductPriceService {
     ProductPrice save(ProductPrice productPrice);
+    public ProductPrice getById(String id);
+    public ProductPrice productActive(String productId, Boolean active);
 
 }

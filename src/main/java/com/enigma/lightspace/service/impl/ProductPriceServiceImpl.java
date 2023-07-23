@@ -14,4 +14,14 @@ public class ProductPriceServiceImpl implements ProductPriceService {
     public ProductPrice save(ProductPrice productPrice) {
         return productPriceRepository.save(productPrice);
     }
+
+    @Override
+    public ProductPrice getById(String id) {
+        return null;
+    }
+
+    @Override
+    public ProductPrice productActive(String productId, Boolean active) {
+        return null;
+    }
 }

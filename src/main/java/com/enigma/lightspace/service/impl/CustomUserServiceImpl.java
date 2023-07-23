@@ -24,11 +24,11 @@ public class CustomUserServiceImpl implements UserDetailsService {
         UserCredential userCredential = userCredentialRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
 
-//        List<SimpleGrantedAuthority> grantedAuthorities = userCredential.getRoles();
-//                .stream()
-//                .map(role -> new SimpleGrantedAuthority(role.getRole().name())).collect(Collectors.toList());
-
+//        Role role = userCredential.getRole();
+//        ERole eRole = userCredential.getRole().getRole();
+//        String name = userCredential.getRole().getRole().name();
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userCredential.getRole().getRole().name());
+
         List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>(Collections.singleton(authority));
 
         return UserDetailsImpl.builder()

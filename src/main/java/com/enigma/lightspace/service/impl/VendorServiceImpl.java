@@ -4,7 +4,9 @@ import com.enigma.lightspace.entity.Vendor;
 import com.enigma.lightspace.repository.VendorRepository;
 import com.enigma.lightspace.service.VendorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,7 +21,8 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public Vendor getById(String id) {
-        return vendorRepository.findById(id).orElseThrow();
+        return vendorRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Id notfound"));
     }
 
     @Override
