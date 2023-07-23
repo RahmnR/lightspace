@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class ResponseOrder {
+public class OrderResponse {
     private String orderId;
     private LocalDateTime orderDate;
     private List<OrderDetailResponse> orderDetailResponse;

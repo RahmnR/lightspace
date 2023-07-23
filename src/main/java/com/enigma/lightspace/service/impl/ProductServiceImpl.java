@@ -36,6 +36,8 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse create(ProductRequest request,Authentication authentication) {
         validationUtil.validate(request);
         Vendor vendor = vendorService.getByAuth(authentication);
+        if (vendor.getName().isEmpty()||vendor.getName().isBlank())throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,
+                "Profile Name is Required, Please Update your profile");
 
         System.out.println("Coba dini"+vendor.getName());
         Product product = Product.builder()
@@ -45,7 +47,6 @@ public class ProductServiceImpl implements ProductService {
                 .status(true)
                 .build();
         productRepository.saveAndFlush(product);
-
 
         ProductPrice productPrice = ProductPrice.builder()
                 .product(product)
@@ -57,6 +58,8 @@ public class ProductServiceImpl implements ProductService {
         productPriceService.save(productPrice);
         return toProductRespon(product,productPrice);
     }
+
+
 
     @Override
     public List<ProductResponse> createBulk(List<ProductRequest> products, Authentication authentication) {
@@ -82,6 +85,11 @@ public class ProductServiceImpl implements ProductService {
         ProductPrice productPrice = productPriceService.productActive(product.getId(), true);
         return toProductRespon(product,productPrice);
     }
+    @Override
+    public Product getProductByCode(String code) {
+        return findOrThrow(code);
+    }
+
     @Transactional(rollbackOn = Exception.class)
     @Override
     public ProductResponse update(ProductRequest request) {
