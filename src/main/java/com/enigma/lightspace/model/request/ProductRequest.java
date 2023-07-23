@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class ProductRequest {
+
     private String productId;
+    private String productCode;
     private String name;
-    private String Category;
+    private String category;
     private Integer stock;
     private Long price;
     private String storeId;

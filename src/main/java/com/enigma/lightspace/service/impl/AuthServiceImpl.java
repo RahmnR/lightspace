@@ -75,6 +75,7 @@ public class AuthServiceImpl implements AuthService {
                     .build();
             userCredentialRepository.saveAndFlush(credential);
             Vendor vendor = Vendor.builder()
+                    .status(true)
                     .userCredential(credential)
                     .build();
             vendorService.create(vendor);
