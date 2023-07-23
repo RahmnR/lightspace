@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.Writer;
 import java.util.List;
 
 @RestController
@@ -40,6 +42,15 @@ public class OrderController {
                         .statusCode(HttpStatus.OK.value())
                         .message("Successfully get all transaction")
                         .data(orderResponses)
+                        .build());
+    }
+    @GetMapping("/csv")
+    public ResponseEntity<?> getCsv(HttpServletResponse response) {
+        orderService.createCsv(response);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CommonResponse.builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .message("Successfully export csv")
                         .build());
     }
 

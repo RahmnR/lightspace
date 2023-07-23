@@ -12,7 +12,7 @@ public class ProductResponse {
     private String productId;
     private String productCode;
     private String name;
-    private String Category;
+    private String category;
     private Integer stock;
     private Long price;
     private String vendor;
