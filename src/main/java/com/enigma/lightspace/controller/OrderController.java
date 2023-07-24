@@ -35,8 +35,9 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getTransactions() {
-        List<OrderResponse> orderResponses = orderService.getAll();
+    public ResponseEntity<?> getTransactions(@RequestParam(name = "day",required = false)Integer day,
+                                             @RequestParam(name = "month",required = false)Integer month) {
+        List<OrderResponse> orderResponses = orderService.searchBy(day,month);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CommonResponse.builder()
                         .statusCode(HttpStatus.OK.value())

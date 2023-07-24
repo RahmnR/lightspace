@@ -9,8 +9,7 @@ import java.util.List;
 
 public interface OrderService {
     public OrderResponse create(OrderRequest request);
-
     public List<OrderResponse> getAll();
-
+    public List<OrderResponse> searchBy( Integer month, Integer day);
     public void createCsv(HttpServletResponse response);
 }

@@ -11,14 +11,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,6 +91,27 @@ public class OrderServiceImpl implements OrderService {
         return  orders.stream().map(order -> {
             return toOrderResponse(order, order.getOrderDetails());
         }).collect(Collectors.toList());
+    }
+    @Override
+    public List<OrderResponse> searchBy( Integer day, Integer month) {
+        Specification<Order> specification = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (month != null) {
+                Predicate getByMonth = criteriaBuilder
+                        .equal(criteriaBuilder.function("MONTH", Integer.class, root.get("createAt")), month);
+                predicates.add(getByMonth);
+            }
+            if (day != null) {
+                Predicate getByDay = criteriaBuilder
+                        .equal(criteriaBuilder.function("DAY", Integer.class, root.get("createAt")), day);
+                predicates.add(getByDay);
+            }
+            return query.where(predicates.toArray(new Predicate[0])).getRestriction();
+        };
+        List<Order> orders = orderRepository.findAll(specification);
+        return orders.stream().map(order -> toOrderResponse(order, order.getOrderDetails()))
+                .collect(Collectors.toList());
     }
 
     @Override
