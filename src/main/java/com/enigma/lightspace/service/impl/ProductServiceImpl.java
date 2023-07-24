@@ -138,7 +138,7 @@ public class ProductServiceImpl implements ProductService {
                 .productId(product.getId())
                 .productCode(product.getCode())
                 .name(product.getProduct())
-                .Category(product.getCategory().getCategory())
+                .category(product.getCategory().getCategory())
                 .stock(productPrice.getStock())
                 .price(productPrice.getPrice())
                 .vendor(productPrice.getVendor().getName())
